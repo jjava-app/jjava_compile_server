@@ -27,7 +27,7 @@ public class CompileController {
     private final Executor compileExecutor; // 비동기 실행 전용 스레드풀 주입 (AsyncConfig에서 정의)
 
     @PostMapping("/compile")
-    public ResponseEntity<?> jsRun(@RequestBody CompileRequest.DTO reqDTO) {
+    public ResponseEntity<?> compile(@RequestBody CompileRequest.DTO reqDTO) {
 
         // 1. 지원 언어 검사
         if (!"javascript".equalsIgnoreCase(reqDTO.getType())) {
