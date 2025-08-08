@@ -33,22 +33,27 @@ public class CompileController {
             return Resp.ok(new CompileResponse.DTO(null, "지원하지 않는 코드 유형입니다."));
         }
 
+        // 2. 유효성 검사
+        if (reqDTO.getPayload() == null || reqDTO.getPayload().isBlank()) {
+            return Resp.ok(new CompileResponse.DTO(null, "코드가 비어 있습니다."));
+        }
+
         try {
-            // 2. 비동기 실행 (전용 스레드풀에서 실행)
+            // 3. 비동기 실행 (전용 스레드풀에서 실행)
             CompletableFuture<CompileResponse.DTO> future = CompletableFuture.supplyAsync(() -> {
                 String output = Util.executeJs(reqDTO.getPayload());
                 return new CompileResponse.DTO(reqDTO.getPayload(), output);
             }, compileExecutor);
 
-            // 7. 최대 2초 대기 (초과 시 TimeoutException) -무한루프 방지
+            // 4. 최대 2초 대기 (초과 시 TimeoutException) -무한루프 방지
             CompileResponse.DTO respDTO = future.get(2, TimeUnit.SECONDS);
             return Resp.ok(respDTO);
 
         } catch (TimeoutException e) {
-            // 9. 시간 초과 응답
+            // 5. 시간 초과 응답
             return Resp.ok(new CompileResponse.DTO(null, "실행 시간이 너무 오래 걸립니다 (무한루프 또는 비효율적인 코드)"));
         } catch (Exception e) {
-            // 10. 그 외 예외 처리 (메시지 가공 후 응답)
+            // 6. 그 외 예외 처리 (메시지 가공 후 응답)
             String msg = ErrorMessageUtil.errorMessage(Optional.ofNullable(e.getMessage()).orElse(""));
             return Resp.ok(new CompileResponse.DTO(null, msg));
         }
