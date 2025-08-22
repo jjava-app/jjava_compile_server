@@ -6,11 +6,9 @@ public class CompileRequest {
 
     @Data
     public static class DTO {
-        private String type;
         private String payload;
 
-        public DTO(String type, String payload) {
-            this.type = type;
+        public DTO(String payload) {
             this.payload = payload;
         }
     }

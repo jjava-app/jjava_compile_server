@@ -22,12 +22,6 @@ public class CompileController {
 
     @PostMapping("/compile")
     public ResponseEntity<?> complie(@RequestBody CompileRequest.DTO reqDTO) {
-
-        // 1. 지원 언어 검사
-        if (!"javascript".equalsIgnoreCase(reqDTO.getType())) {
-            return Resp.ok(new CompileResponse.DTO(null, "지원하지 않는 코드 유형입니다."));
-        }
-
         // 2. 코드(payload) 유효성 검사
         if (reqDTO.getPayload() == null || reqDTO.getPayload().isBlank()) {
             return Resp.ok(new CompileResponse.DTO(null, "코드가 비어 있습니다."));

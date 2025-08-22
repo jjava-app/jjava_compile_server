@@ -9,7 +9,6 @@ public class CheckRequest {
 
     @Data
     public static class DTO {
-        private String type;
         private String payload;
         private List<TestSpecDTO> tests;
 
@@ -27,8 +26,7 @@ public class CheckRequest {
         }
 
 
-        public DTO(String type, String payload, List<TestSpecDTO> tests) {
-            this.type = type;
+        public DTO(String payload, List<TestSpecDTO> tests) {
             this.payload = payload;
             this.tests = tests;
         }
