@@ -23,14 +23,7 @@ public class CheckController {
 
     @PostMapping("/check")
     public ResponseEntity<?> check(@RequestBody CheckRequest.DTO reqDTO) {
-
-        // 1. 지원 언어 검사
-        if (!"javascript".equalsIgnoreCase(reqDTO.getType())) {
-            return Resp.ok(new CheckResponse.FailDTO(
-                    false, null, null, "지원하지 않는 코드 유형입니다.", null, null));
-        }
-
-        // 2. 코드 유효성 검사
+        // 1. 코드 유효성 검사
         if (reqDTO.getPayload() == null || reqDTO.getPayload().isBlank()) {
             return Resp.ok(new CheckResponse.FailDTO(
                     false, null,
@@ -38,12 +31,12 @@ public class CheckController {
             ));
         }
 
-        // 3. 요청 단위 임시 실행기 생성 (테스트 실행을 위한 단일 스레드)
+        // 2. 요청 단위 임시 실행기 생성 (테스트 실행을 위한 단일 스레드)
         ExecutorService es = Executors.newSingleThreadExecutor();
 
 
         try {
-            // 4. Future 비동기 실행 (모든 테스트 케이스 검증)
+            // 3. Future 비동기 실행 (모든 테스트 케이스 검증)
             Future<Object> future = es.submit(() -> {
 
                 final List<CheckRequest.DTO.TestSpecDTO> tests = reqDTO.getTests();
