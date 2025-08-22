@@ -1,0 +1,14 @@
+services:
+  jjava-compile:
+    build:
+      context: .
+    container_name: jjava-compile
+    ports:
+      - "8081:8081"
+    networks:
+      - backend-net
+
+networks:
+  backend-net:
+    name: backend-net
+    driver: bridge
